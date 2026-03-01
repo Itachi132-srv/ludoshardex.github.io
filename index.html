@@ -48,7 +48,7 @@ body{
     padding:10px 14px;
     border-radius:12px;
     max-width:80%;
-    white-space:pre-line;
+    word-wrap: break-word;
 }
 
 .user{
@@ -98,7 +98,7 @@ button:hover{
 <body>
 
 <div class="chat-container">
-    <div class="header">🔥 DetoxGPT</div>
+    <div class="header">DetoxGPT</div>
     <div class="chat-box" id="chat"></div>
     <div class="input-area">
         <input type="text" id="input" placeholder="Ask DetoxGPT anything...">
@@ -106,81 +106,6 @@ button:hover{
     </div>
 </div>
 
-<script>
-
-let randomReplies = [
-    "Hmm interesting 🤔",
-    "Thora detail me batao bhai.",
-    "Samajh gaya 😎",
-    "Aur kuch poochna hai?"
-];
-
-function sendMessage(){
-    let input = document.getElementById("input");
-    let message = input.value.trim();
-    if(message === "") return;
-
-    addMessage(message,"user");
-    input.value="";
-
-    setTimeout(()=>{
-        let reply = generateReply(message.toLowerCase());
-        addMessage(reply,"bot");
-    },500);
-}
-
-function addMessage(text,type){
-    let chat = document.getElementById("chat");
-    let msg = document.createElement("div");
-    msg.classList.add("message",type);
-    msg.innerText=text;
-    chat.appendChild(msg);
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function generateReply(msg){
-
-    // Greeting
-    if(msg.includes("hello") || msg.includes("hi"))
-        return "Hello bhai 👋 Main DetoxGPT hoon. Batao kya help chahiye?";
-
-    // Discord help
-    if(msg.includes("discord") && msg.includes("channel")){
-        return "Discord channel structure example 👇\n\n" +
-        "📂 INFORMATION\n" +
-        "├ #rules\n" +
-        "├ #announcements\n\n" +
-        "📂 GENERAL\n" +
-        "├ #general-chat\n" +
-        "├ #media\n\n" +
-        "📂 VOICE\n" +
-        "├ 🔊 General VC\n" +
-        "├ 🔊 Gaming VC\n\n" +
-        "Agar specific theme chahiye to batao (gaming, chill, trading etc).";
-    }
-
-    // HTML help
-    if(msg.includes("html"))
-        return "HTML structure banata hai website ka. Agar chaho to main tumhe full template bana ke de sakta hoon.";
-
-    // Server names
-    if(msg.includes("server name"))
-        return "Yeh kuch names try karo:\n- Void Lounge\n- DarkNest\n- Orange Realm\n- Toxic Hub\n- Shadow Base";
-
-    // Time
-    if(msg.includes("time"))
-        return "Abhi time hai: " + new Date().toLocaleTimeString();
-
-    // Default smarter random
-    return randomReplies[Math.floor(Math.random()*randomReplies.length)];
-}
-
-document.getElementById("input")
-.addEventListener("keypress",function(e){
-    if(e.key==="Enter") sendMessage();
-});
-
-</script>
-
+<script src="detoxgpt.js"></script>
 </body>
 </html>
