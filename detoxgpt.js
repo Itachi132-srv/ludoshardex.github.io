@@ -27,16 +27,12 @@ function addMessage(text, type){
 }
 
 function generateReply(msg){
-    // Example rules: sirf user ka poocha hua answer
+    // sirf user ka poocha hua reply
     if(msg.includes("hello") || msg.includes("hi"))
         return "Hello! Main DetoxGPT hoon. Batao kya help chahiye.";
 
-    if(msg.includes("discord") && msg.includes("channel")){
-        return "Discord channel example:\n\n" +
-               "INFORMATION:\n#rules\n#announcements\n\n" +
-               "GENERAL:\n#general-chat\n#media\n\n" +
-               "VOICE:\n🔊 General VC\n🔊 Gaming VC";
-    }
+    if(msg.includes("discord") && msg.includes("channel"))
+        return "Discord channel example:\n\nINFORMATION:\n#rules\n#announcements\n\nGENERAL:\n#general-chat\n#media\n\nVOICE:\n🔊 General VC\n🔊 Gaming VC";
 
     if(msg.includes("html"))
         return "HTML structure website ka skeleton hai. Agar chaho, main template bana ke de sakta hoon.";
@@ -50,7 +46,6 @@ function generateReply(msg){
     if(msg.includes("help"))
         return "Main choti moti help kar sakta hoon. Specific batao.";
 
-    // Agar koi unknown query
     return "Main samajh gaya, aur detail me batao taake main sahi help kar saku.";
 }
 
