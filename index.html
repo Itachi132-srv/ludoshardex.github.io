@@ -8,12 +8,25 @@
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="header">DetoxGPT</div>
-    <div class="chat-box" id="chat"></div>
-    <div class="input-area">
-        <input type="text" id="input" placeholder="Ask DetoxGPT anything...">
-        <button onclick="sendMessage()">Send</button>
+<div class="app-container">
+    <!-- Hamburger + Chats list -->
+    <div class="sidebar" id="sidebar">
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+        </div>
+        <div class="chat-list" id="chatList"></div>
+        <button id="newChat">+ New Chat</button>
+    </div>
+
+    <!-- Chat area -->
+    <div class="chat-container">
+        <div class="header" id="chatHeader">DetoxGPT</div>
+        <div class="chat-box" id="chat"></div>
+        <div class="input-area">
+            <input type="text" id="input" placeholder="Ask DetoxGPT anything...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
 </div>
 
