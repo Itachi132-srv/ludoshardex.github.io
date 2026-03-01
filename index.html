@@ -1,163 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Currency Code Gen</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body{
-      margin:0;
-      font-family:'Segoe UI',sans-serif;
-      background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
-      color:white;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shardex AI</title>
 
-    .card{
-      background:#141414;
-      padding:35px;
-      width:360px;
-      border-radius:15px;
-      box-shadow:0 0 25px rgba(255,140,0,0.4);
-      text-align:center;
-      animation:fadeIn 0.5s ease-in-out;
-    }
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#111;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
 
-    h2{ color:#ff8c00; margin-bottom:15px; }
+.chat-container{
+    width:95%;
+    max-width:500px;
+    height:90vh;
+    background:#1a1a1a;
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(255,140,0,0.3);
+}
 
-    button{
-      background:#ff8c00;
-      border:none;
-      padding:10px 20px;
-      margin:8px;
-      border-radius:8px;
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-      transition:0.3s;
-    }
+.header{
+    background:linear-gradient(45deg,#ff7b00,#ffae00);
+    padding:15px;
+    text-align:center;
+    font-weight:bold;
+    font-size:20px;
+    color:white;
+}
 
-    button:disabled{
-      opacity:0.4;
-      cursor:not-allowed;
-    }
+.chat-box{
+    flex:1;
+    padding:15px;
+    overflow-y:auto;
+}
 
-    button:hover:not(:disabled){
-      background:#ff6a00;
-      transform:scale(1.05);
-      box-shadow:0 0 15px #ff8c00;
-    }
+.message{
+    margin:10px 0;
+    padding:10px 15px;
+    border-radius:15px;
+    max-width:75%;
+    word-wrap:break-word;
+}
 
-    input{
-      width:92%;
-      padding:10px;
-      margin:6px 0;
-      border-radius:8px;
-      border:1px solid #ff8c00;
-      background:#1f1f1f;
-      color:white;
-      outline:none;
-    }
+.user{
+    background:#ff7b00;
+    color:white;
+    align-self:flex-end;
+    margin-left:auto;
+}
 
-    .hidden{ display:none; }
+.bot{
+    background:#333;
+    color:white;
+    align-self:flex-start;
+}
 
-    .success{ color:lime; font-size:20px; margin-top:10px; }
-    .error{ color:red; font-size:14px; }
+.input-area{
+    display:flex;
+    padding:10px;
+    background:#222;
+}
 
-    @keyframes fadeIn{
-      from{opacity:0; transform:translateY(15px);}
-      to{opacity:1; transform:translateY(0);}
-    }
-  </style>
+input{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:20px;
+    outline:none;
+    font-size:15px;
+}
+
+button{
+    margin-left:10px;
+    padding:10px 15px;
+    border:none;
+    border-radius:20px;
+    background:#ff7b00;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ff9500;
+}
+</style>
 </head>
+
 <body>
 
-<div class="card" id="page1">
-  <h2>Select Reward Type</h2>
-  <button onclick="nextPage('Owo')">Owo</button>
-  <button onclick="nextPage('LiteCoin')">LiteCoin</button>
-</div>
-
-<div class="card hidden" id="page2">
-  <h2 id="typeTitle"></h2>
-  <input type="text" id="username" placeholder="Enter Username" oninput="validateForm()">
-  <input type="text" id="accountName" placeholder="Enter Account Email" oninput="validateForm()">
-  <input type="text" id="serverName" placeholder="Enter Account Password" oninput="validateForm()">
-  <input type="number" id="amount" placeholder="Enter Amount" oninput="validateForm()">
-  <p id="formError" class="error hidden">Please fill all fields correctly</p>
-  <button id="generateBtn" onclick="generateCode()" disabled>Generate Code</button>
-
-  <p id="generatedCode"></p>
-  <button id="copyBtn" class="hidden" onclick="copyCode()">Copy Code</button>
-  <button id="nextBtn" class="hidden" onclick="showVerify()">Next</button>
-</div>
-
-<div class="card hidden" id="page3">
-  <h2>Enter Code</h2>
-  <input type="text" id="verifyInput" placeholder="Enter Code">
-  <button onclick="verifyCode()">Submit</button>
-  <p id="result"></p>
+<div class="chat-container">
+    <div class="header">🔥 Shardex AI</div>
+    <div class="chat-box" id="chat"></div>
+    <div class="input-area">
+        <input type="text" id="input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
 </div>
 
 <script>
-let currentCode="";
+function sendMessage(){
+    let input = document.getElementById("input");
+    let message = input.value.trim();
+    if(message === "") return;
 
-function nextPage(type){
-  document.getElementById("page1").classList.add("hidden");
-  document.getElementById("page2").classList.remove("hidden");
-  document.getElementById("typeTitle").innerText=type+" Generator (Demo)";
+    addMessage(message, "user");
+    input.value = "";
+
+    setTimeout(()=>{
+        let reply = getReply(message.toLowerCase());
+        addMessage(reply, "bot");
+    },500);
 }
 
-function validateForm(){
-  const u=username.value.trim();
-  const e=email.value.trim();
-  const p=password.value.trim();
-  const amt=amount.value;
-
-  if(u && a && s && amt > 0){
-    generateBtn.disabled=false;
-    formError.classList.add("hidden");
-  }else{
-    generateBtn.disabled=true;
-    formError.classList.remove("hidden");
-  }
+function addMessage(text, type){
+    let chat = document.getElementById("chat");
+    let msg = document.createElement("div");
+    msg.classList.add("message", type);
+    msg.innerText = text;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
 }
 
-function generateCode(){
-  const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  currentCode="";
-  for(let i=0;i<7;i++){
-    currentCode+=chars.charAt(Math.floor(Math.random()*chars.length));
-  }
-  generatedCode.innerHTML="Generated Code: <b>"+currentCode+"</b>";
-  copyBtn.classList.remove("hidden");
-  nextBtn.classList.remove("hidden");
+function getReply(msg){
+    if(msg.includes("hello") || msg.includes("hi"))
+        return "Hello 👋 Main Shardex AI hoon!";
+    if(msg.includes("help"))
+        return "Main choti moti help kar sakta hoon 😎";
+    if(msg.includes("owner"))
+        return "Mera owner Shardex hai 🔥";
+    if(msg.includes("time"))
+        return "Abhi time hai: " + new Date().toLocaleTimeString();
+    return "Interesting 🤔 Aur batao?";
 }
 
-function copyCode(){
-  navigator.clipboard.writeText(currentCode);
-  alert("Code Copied!");
-}
-
-function showVerify(){
-  page2.classList.add("hidden");
-  page3.classList.remove("hidden");
-}
-
-function verifyCode(){
-  if(!currentCode){
-    result.innerHTML="<span class='error'>Generate code first</span>";
-    return;
-  }
-
-  if(verifyInput.value===currentCode){
-    result.innerHTML="✔ <span class='success'>Success</span>";
-  }else{
-    result.innerHTML="<span class='error'>✖ Invalid Code</span>";
-  }
-}
+document.getElementById("input")
+.addEventListener("keypress", function(e){
+    if(e.key === "Enter") sendMessage();
+});
 </script>
 
 </body>
