@@ -1,22 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detox</title>
-<link rel="stylesheet" href="style.css">
+  <title>Ludo Shardex</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="header">Detox</div>
-    <div class="chat-box" id="chat"></div>
-    <div class="input-area">
-        <input type="text" id="input" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+<h1 class="logo">🎲 Ludo Shardex</h1>
+
+<div class="coins">Coins: <span id="coins">1000</span> 💰</div>
+
+<div class="board" id="board"></div>
+
+<div class="controls">
+  <div class="dice" id="dice">🎲</div>
+  <button onclick="rollDice()">Roll</button>
+  <h3 id="turn">Your Turn</h3>
 </div>
 
-<script src="chatbot.js"></script>
+<audio id="diceSound" src="sounds/dice.mp3"></audio>
+<audio id="moveSound" src="sounds/move.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+
+<script src="script.js"></script>
 </body>
 </html>
