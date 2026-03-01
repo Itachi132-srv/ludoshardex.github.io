@@ -9,7 +9,7 @@ function sendMessage(){
         const reply=generateReply(message.toLowerCase());
         hideTypingEffect();
         addMessage(reply,"bot");
-    },1500); // 1.5 sec delay
+    },1500);
 }
 
 function addMessage(text,type){
@@ -22,21 +22,23 @@ function addMessage(text,type){
 }
 
 function generateReply(msg){
-    // Only respond to user questions, no help
-    if(msg.includes("hello")||msg.includes("hi")){
-        return "Hello! Main ChatBot hoon. Tum kya discuss karna chahte ho?";
+    // Predefined smart replies
+    const replies = [
+        {keywords:["hello","hi","hey"], response:"Hello! Main ChatBot hoon. Tum kya discuss karna chahte ho?"},
+        {keywords:["sad","udaas","depressed"], response:"Oh… ye normal hai. Thoda relax karo aur safe cheezein karo."},
+        {keywords:["help","assist","guide","kaise"], response:"Sorry, main help nahi de sakta. Main sirf chatting ke liye hoon."},
+        {keywords:["time"], response:"Abhi ka time hai: "+new Date().toLocaleTimeString()},
+        {keywords:["name","server"], response:"Yeh sirf chatting bot hai, koi real server nahi hai."}
+    ];
+
+    for(const item of replies){
+        for(const kw of item.keywords){
+            if(msg.includes(kw)) return item.response;
+        }
     }
-    if(msg.includes("time")){
-        return "Abhi ka time hai: "+new Date().toLocaleTimeString();
-    }
-    if(msg.includes("name")||msg.includes("server")){
-        return "Yeh sirf ek chatting bot hai, koi real server nahi hai.";
-    }
-    if(msg.includes("help") || msg.includes("assist") || msg.includes("how") || msg.includes("guide")){
-        return "Sorry, main help nahi de sakta. Main sirf chatting ke liye hoon.";
-    }
-    // Default: echo back user question
-    return "Tumne ye kaha: \""+msg+"\". Main sirf is ka reply de sakta hoon.";
+
+    // Default fallback
+    return "Hmm… interesting! Tumne ye kaha: \""+msg+"\". Main sirf iska chat reply de sakta hoon.";
 }
 
 // Typing animation
@@ -55,7 +57,6 @@ function hideTypingEffect(){
     if(typing) typing.remove();
 }
 
-// Enter key support
 document.getElementById("input").addEventListener("keypress",function(e){
     if(e.key==="Enter") sendMessage();
 });
