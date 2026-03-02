@@ -1,83 +1,52 @@
-const board = document.getElementById("board");
-const diceEl = document.getElementById("dice");
-const turnEl = document.getElementById("turn");
+let API_KEY = "";
 
-let cells=[];
-let path=[];
-let playerPos=0;
-let aiPos=0;
-let playerTurn=true;
-
-// create board
-for(let i=0;i<100;i++){
-    let cell=document.createElement("div");
-    cell.classList.add("cell");
-    board.appendChild(cell);
-    cells.push(cell);
+function saveKey(){
+  API_KEY = document.getElementById("a93b720ddea64c2d8859e9541a266057").value;
+  alert("API Key Saved!");
 }
 
-// simple path (snake style)
-for(let i=0;i<100;i++){
-    path.push(i);
-    cells[i].classList.add("path");
+function addMessage(text, sender){
+  const chatBox = document.getElementById("chatBox");
+  const msg = document.createElement("div");
+  msg.classList.add("message", sender);
+  msg.innerText = text;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-updateBoard();
+async function sendMessage(){
+  const input = document.getElementById("userInput");
+  const message = input.value;
+  if(!message) return;
 
-function rollDice(){
-    if(!playerTurn) return;
+  addMessage(message, "user");
+  input.value = "";
 
-    let dice=Math.floor(Math.random()*6)+1;
-    diceEl.innerText=dice;
+  addMessage("Typing...", "bot");
 
-    playerPos+=dice;
+  try{
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + API_KEY
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {role: "system", content: "You are Detox AI, an intelligent assistant."},
+          {role: "user", content: message}
+        ]
+      })
+    });
 
-    if(playerPos>=99){
-        alert("You Win 🎉");
-        resetGame();
-        return;
-    }
+    const data = await response.json();
 
-    updateBoard();
-    playerTurn=false;
-    turnEl.innerText="AI Turn";
+    document.querySelector(".bot:last-child").remove();
+    addMessage(data.choices[0].message.content, "bot");
 
-    setTimeout(aiMove,800);
-}
-
-function aiMove(){
-    let dice=Math.floor(Math.random()*6)+1;
-    diceEl.innerText=dice;
-
-    aiPos+=dice;
-
-    if(aiPos>=99){
-        alert("AI Wins 🤖");
-        resetGame();
-        return;
-    }
-
-    updateBoard();
-    playerTurn=true;
-    turnEl.innerText="Your Turn";
-}
-
-function updateBoard(){
-    cells.forEach(c=>c.innerHTML="");
-
-    let pToken=document.createElement("div");
-    pToken.classList.add("token","red");
-    cells[path[playerPos]].appendChild(pToken);
-
-    let aToken=document.createElement("div");
-    aToken.classList.add("token","blue");
-    cells[path[aiPos]].appendChild(aToken);
-}
-
-function resetGame(){
-    playerPos=0;
-    aiPos=0;
-    playerTurn=true;
-    turnEl.innerText="Your Turn";
-    updateBoard();
+  }catch(error){
+    document.querySelector(".bot:last-child").remove();
+    addMessage("Error connecting to API.", "bot");
+  }
 }
